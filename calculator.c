@@ -1,0 +1,58 @@
+#include <stdio.h>
+/**
+ *main - calulator
+ *
+ *Return: Always 0 (Success)
+ */
+int main(void)
+{
+char op, op2;
+double first, second, third, e;
+printf("Enter an operator (+, -, *, /): ");
+scanf("%c", &op);
+printf("Enter two operands: ");
+scanf("%lf %lf", &first, &second);
+switch (op)
+{
+case '+':
+printf("%.1lf + %.1lf = %.1lf\n", first, second, first + second);
+e = first + second;
+break;
+case '-':
+printf("%.1lf - %.1lf = %.1lf\n", first, second, first - second);
+e = first - second;
+break;
+case '*':
+printf("%.1lf * %.1lf = %.1lf\n", first, second, first * second);
+e = first * second;
+break;
+case '/':
+printf("%.1lf / %.1lf = %.1lf\n", first, second, first / second);
+e = first / second;
+break;
+default:
+printf("Error! operator is not correct");
+}
+printf("Enter an operator (+, -, *, /): ");
+scanf("%s", &op2);
+printf("Enter the number %f you want to calulate with:", e);
+scanf("%lf", &third);
+switch (op2)
+{
+case '+':
+	printf("%.1lf + %.1lf = %.1lf\n", e, third, e + third);
+break;
+case '-':
+	printf("%.1lf - %.1lf = %.1lf\n", e, third, e - third);
+break;
+case '*':
+	printf("%.1lf *%.1lf = %.1lf\n", e, third, e * third);
+break;
+case '/':
+	printf("%.1lf / %.1lf = %.1lf\n", e, third, e / third);
+break;
+default:
+printf("Error! operator is not correct");
+}
+return (0);
+}
