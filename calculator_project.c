@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 /*
- * MAIN - a scientific calculator
+ * MAIN - a scientific calculator with multiple entries
  *RETURN: Always 0 (Success)
  */
 
