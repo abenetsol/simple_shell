@@ -19,8 +19,8 @@ void free_grid(char **grid)
 }
 /**
  * _which - entry point
- *@env: enviroment array
  * @cmd: command to find full path
+ * @env: enviroment array
  * Return: full path on success
  *
  */
@@ -54,8 +54,8 @@ char *_which(char *cmd, char **env)
 /**
  * special_char_finder - entry point
  * @str: string to search special character
- * @ch: char to search for (its a string)
- * Return: changed string (or not)
+ * @ch: char to search for
+ * Return: changed string or not
  */
 char *special_char_finder(char *str, char *ch)
 {
@@ -71,10 +71,10 @@ char *special_char_finder(char *str, char *ch)
 }
 /**
 * array_copy - Entry point
-* @extra: count of extra spaces
 * @arr: Array of chars* to copy
-* Description: copy an array of char*
-* Return: The copy of arr
+* @extra: count of extra spaces
+* Description: Copp an array of char*
+* Return: The copy of array
 */
 char **array_copy(char **arr, int extra)
 {
