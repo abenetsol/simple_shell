@@ -1,10 +1,9 @@
 #include "main.h"
 
 /**
- * Description: finds the length of a string
- * _strlen - entry point
- * @s: string to find length
- * Return: length
+ *_strlen - entry point
+ *@s: string to find length
+ *Return: length
  */
 int _strlen(char *s)
 {
@@ -18,11 +17,10 @@ int _strlen(char *s)
 	return (len);
 }
 /**
- * Description: Compares strings
- * _strcmp - entry point
- * @s1: string 1 to be compared
- * @s2: string 2 to be compared
- * Return: 0 if equal, !0 if different
+ *_strcmp - entry point
+ *@s1: string 1 to be compared
+ *@s2: string 2 to be compared
+ *Return: 0 if equal, !0 if different
  */
 int _strcmp(char *s1, char *s2)
 {
@@ -41,22 +39,20 @@ int _strcmp(char *s1, char *s2)
 	return (a - b);
 }
 /**
- * Description: Character output
- * _putchar - writes the character c to stdout
- * @c: The character to print.
- * Return: On success 1.
- * On error, -1 is returned, and error is set.
+ *_putchar - writes the character c to stdout
+ *@c: The character to print.
+ *Return: On success 1.
+ *On error, -1 is returned, and error is set.
  */
 int _putchar(char c)
 {
 	return (write(1, &c, 1));
 }
 /**
- * Description: Appends a string
- * _strcat - entry point
- * @dest: string to append
- * @src: string to be appended
- * Return: concatnated strings
+ *_strcat - entry point
+ *@dest: string to append
+ *@src: string to be appended
+ *Return: concatnated strings
  */
 char *_strcat(char *dest, char *src)
 {
@@ -73,11 +69,10 @@ char *_strcat(char *dest, char *src)
 	return (dest);
 }
 /**
- * Description: copies a string
  *_strcpy - copy a string
- * @dest: destination of the copied string
- * @src: source of the string
- * Return: copied string
+ *@dest: destination of the copied string
+ *@src: source of the string
+ *Return: copied string
  */
 char *_strcpy(char *dest, char *src)
 {

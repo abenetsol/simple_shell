@@ -1,7 +1,6 @@
 #include "main.h"
 
 /**
- * Description: Prints contents of str
  * _puts - Entry point
  * @str: Array of char
  * Return: Nothing
@@ -27,7 +26,6 @@ void _puts(char *str)
 	}
 }
 /**
- * Description: Appends and concatenates strings
  * _strncpy - entry point
  * @dest: string to append
  * @src: string to be appended
@@ -51,7 +49,6 @@ char *_strncpy(char *dest, char *src, int n)
 	return (start);
 }
 /**
- * Description: Converts integers to string
  * _atoi - entry point
  * @s: string to convert to int
  * Return: converted integer
@@ -75,7 +72,6 @@ int _atoi(char *s)
 	return (n);
 }
 /**
- * Description: converts an integer to a string
  * _itoa - Entry point
  * @value: integer to convert
  * @ptr: place to put the converted integer
