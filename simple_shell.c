@@ -1,134 +1,167 @@
-#include "main.h"
+#include "Shell.h"
 
 /**
- * built_ins - Entry point
- * @argv: command
- * @line: line
- * @env: enviroment array
- * @envi: pointer to enviromnet array
- * description: handles different cases where user want to exit shell
- * Return: 0
+ * main - main function of the shell
+ * Return: Always 0
  */
-int built_ins(char **argv, char *line, char **env, char ***envi)
+int main(void)
 {
-	int exit_status = 0;
+	char *input = NULL, **tokens = NULL;
+	int status = 0, ex = 0, tty = 1;
+	size_t n = 0;
+	pid_t child;
 
-	if (argv[0])
+	tty = isatty(0);
+	while (1)
 	{
-		if (_strcmp(argv[0], "exit") == 0)
-		{
-			if (argv[1])
-			{
-				exit_status = _atoi(argv[1]);
-				free_everything(line, argv, env);
-				exit(exit_status);
-			}
-			else
-				return (0);
-		}
-		if (_strcmp(argv[0], "env") == 0)
-		{
-			env_builtin(argv, env);
-			return (1);
-		}
-		if ((_strcmp(argv[0], "setenv") == 0) && argv[1] != NULL && argv[2] != NULL)
-		{
-			_setenv(argv[1], argv[2], 1, env, envi);
-			argv[0] = NULL;
-			return (1);
-		}
-		cd_builtin(argv, env, envi);
-		help_builtin(argv);
-	}
-	return (1);
-}
-/**
- * free_everything - Entry point
- * @line: eof
- * @argv: command
- * @env: enviroment array
- * description: sets some variables to null and frees allocs
- * Return: void
- */
-void free_everything(char *line, char **argv, char **env)
-{
-	free_grid(env);
-	free(line);
-	line = NULL;
-	free(argv);
-}
-/**
-* sig_handler - Entry point
-* @signum: sig number
-* Description: Handle the Ctrl+C signal
-* Return: Nothing
-*/
-void sig_handler(int signum)
-{
-	signum = signum;
-	write(1, "\n($) ", 5);
-}
-
-/**
- * interactive - Entry point
- * @f: command
- * description: returns according to interactive mode
- * Return: void
- */
-
-int interactive(size_t f)
-{
-	if (!isatty(STDIN_FILENO))
-		f = 0;
-	if (isatty(STDIN_FILENO))
-		write(1, "($) ", 4);
-	return (f);
-}
-/**
- * main - Entry point
- * @argc: arg count
- * @argv: arg vector
- * description: main
- * Return: 0
- */
-int main(int argc __attribute__((unused)), char **argv)
-{
-	pid_t child = 100;
-	int eof = 0, status = 0, pichu = 0, exit_val = 0;
-	size_t len = 0, f = 1;
-	char **args = NULL, **my_envi;
-	char *line = NULL;
-
-	my_envi = array_copy(environ, 0);
-	for (pichu = 1; ; pichu++)
-	{
-		f = interactive(f);
-		signal(SIGINT, sig_handler);
-		eof = getline(&line, &len, stdin);
-		if (ctrl_d(eof, f) == 0)
-			break;
-		free(args);
-		args = parser(line);
-		if ((built_ins(args, line, my_envi, &my_envi)) == 0)
-		{
-			fflush(STDIN_FILENO);
-			break;
-		}
 		child = fork();
 		if (child == -1)
 		{
-			free_everything(line, args, my_envi);
-			return (1);
+			perror("");
+			exit(errno);
 		}
 		if (child == 0)
 		{
-			exec_aux(args, my_envi, argv, pichu);
+			if (isatty(0))
+				write(1, "$ ", 3);
+			getline(&input, &n, stdin);
+			tokens = _getinput(input);
+			free(input);
+			tokens[0] = checkexec(tokens);
+			if (execve(tokens[0], tokens, environ) == -1)
+			{
+				perror("");
+				free(tokens);
+				exit(errno);
+			}
+		}
+		if (child > 0)
+		{
+			ex = WEXITSTATUS(status);
+			wait(&status);
+			free(input);
+			if (tty == 0 || WEXITSTATUS(status) == 98)
+				return (ex);
+		}
+	}
+	return (0);
+}
+/**
+ * _getinput - separes the imput in tokens
+ * @input: input
+ * Return: pointer to array of strings
+ */
+char **_getinput(char *input)
+{
+	char **tokens;
+	int a = 0, b, i, size = 0;
+	char *buff;
+
+	size = _check_tokens(input);
+	tokens = malloc(sizeof(char *) * size);
+	if (tokens == NULL)
+	{
+		perror("");
+		exit(errno);
+	}
+	for (i = 0; i < size; i++)
+		tokens[i] = NULL;
+	buff = strtok(input, " \n");
+	b = checkbin(input, tokens);
+	if (b == 0)
+	{
+		exit(99);
+		perror("");
+	}
+	if (b == 1)
+	{
+		exit(98);
+		perror("");
+	}
+	while (buff != NULL)
+	{
+		b = _strlen(buff);
+		tokens[a] = malloc(sizeof(char) * b + 1);
+		_strcpy(tokens[a], buff);
+		buff = NULL;
+		buff = strtok(NULL, " \n");
+		a++;
+	}
+	tokens[a] = NULL;
+	return (tokens);
+}
+/**
+ * checkexec - checks for an executable file
+ * @file: Name of the file to search
+ * Return: directory of the file
+ */
+char *checkexec(char **file)
+{
+	char *buff = NULL, *buff2 = NULL, *buff3 = NULL, PATH[] = "PATH";
+	int a = 0, b = 0, test = 0;
+	struct stat st;
+
+	if (stat(file[0], &st) == 0)
+		return (file[0]);
+	buff3 = _strcon("/", file[0]);
+	for (a = 0; environ[a] != NULL; a++)
+	{
+		for (b = 0; environ[a][b] != '='; b++)
+		{
+		}
+		buff = malloc(sizeof(char) * b + 1);
+		for (b = 0; environ[a][b] != '='; b++)
+			buff[b] = environ[a][b];
+		buff[b] = '\0';
+		if (_strcmp(buff, PATH) == 0)
+		{
+			free(buff);
 			break;
 		}
-		else
-			exit_val = parent_wait(child, &status);
-		fflush(STDIN_FILENO);
+		free(buff);
 	}
-	free_everything(line, args, my_envi);
-	return (exit_val);
+	buff = malloc(sizeof(char) * (_strlen(environ[a]) + 1));
+	_strcpy(buff, environ[a]);
+	strtok(buff, "=");
+	buff2 = strtok(NULL, ":");
+	while (buff2 != NULL)
+	{
+		buff2 = _strcon(buff2, buff3);
+		test = stat(buff2, &st);
+		if (test == 0)
+		{
+			free(file[0]), free(buff), free(buff3);
+			return (buff2);
+		}
+		free(buff2);
+		buff2 = strtok(NULL, ":");
+	}
+	free(file[0]), free(file), free(buff), free(buff3), exit(127);
+}
+/**
+ * _check_tokens - check the ammount of tokens
+ * @input: input
+ * Return: ammount of tokens
+ */
+int _check_tokens(char *input)
+{
+	char *buff2;
+	int size = 0;
+
+	buff2 = _strcon("", input);
+	if (strtok(buff2, " \n") != NULL)
+	{
+		size++;
+	}
+	while (strtok(NULL, " \n") != NULL)
+		size++;
+	free(buff2);
+	if (size == 0)
+	{
+		free(input);
+		exit(97);
+	}
+	else
+		size++;
+	return (size);
 }
