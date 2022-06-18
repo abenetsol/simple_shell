@@ -113,7 +113,7 @@ char *_getenv(const char *name, char **env)
 	int i = 0, j = 0;
 	char *word;
 
-	for (i = 0; env[i] != '\0'; i++)
+	for (i = 0 ; env&[i] != '\0'; i++)
 	{
 		word = env[i];
 		for (j = 0; name[j] != '\0'; j++)
