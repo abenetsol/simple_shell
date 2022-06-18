@@ -1,0 +1,38 @@
+.\"Man page for Eyob and Abenet's shell project.
+.TH man 1 hsh "18 June 2022" "1.0" "simple shell man page"
+.SH NAME
+.B hsh - ALX Shell
+.SH SYNOPSIS
+hsh [command] [command options]
+.SH DESCRIPTION
+.B hsh is a command interpreter that executes commands passed from a command line string, the standard input or an specific file. It is originally designed to be a prototype copy of the standard UNIX command language interpreter sh.
+.SH EXECUTION
+The interactive mode, as defined by isatty(3), can be executed by calling the absolute or relative path of the executable.
+.PP
+The non interactive mode can be used without entering the hsh program, by redirecting the output from another command such as 'echo' or an specified file.
+E.g. echo "ls" | ./hsh
+.SH COMMAND SEARCHING
+.B hsh searches for the argument 0 of the string passed to it which was captured by the getline function (see man 3 getline). It first searches for matching built-ins, then for executables with the command name in the current directory, lastly it searches for the command in the PATH. If none of these options are true, the argument can only be the full path of a command or an invalid command.
+.SH ARGUMENT HANDLING
+.B Just like sh, hsh handles command arguments by passing a the entire tokenized (man 3 strtok) command line to the execve function (man 2 execve).
+.SH COMMENTS
+.B The inclusion of a '#' character causes the reamining of the command line to be ignor\
+ed.
+.SH BUILT-INS
+.B cd:  hsh currently handles the cd builtin that moves directories by updating environment variables. cd alone works the same way as cd $HOME would, cd - and cd.. both work accordinly
+.PP
+.B exit: If implemented, the exit built in must be alone or followed by and status value.
+.PP
+.B help: Shows all built-ins and explain how to use it.
+.PP
+.B env: prints the current environment.
+.PP
+.B setenv:  sets a new environment variable.
+.SH CTRL + D
+.B Sends signal (man 3 signal) and terminates the process.
+.SH CTRL + C
+.B As of in sh, ctrl + c is ignored in hsh, and has no efect on terminating any process.
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Eyob berhanemeskel && Abenet dessie

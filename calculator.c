@@ -16,7 +16,7 @@ int main(void)
 do {
 printf(" Select an operation to perform the calculation in C Calculator: ");
 printf("\n 1 Addition \t \t 2 Subtraction\n 3 Multiplication \t 4 Division");
-printf("\n 5 Square \t \t 7 Exit \n \n Please ");
+printf("\n 5 Square \t \t 6 Exit \n \n Please ");
 scanf("%d", &op1);
 choose(op1);
 if (op1 == 5 || op1 == 6)
